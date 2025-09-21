@@ -1,20 +1,241 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>Aim Game - Nişan Alma Oyunu</title>
   <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
 </head>
 <body>
   
-  <div class="parent">
-    <h2 class="gameTime">Kalan Süre : 60 Saniye</h2>
-    <button class="oyunaBasla">Oyuna Başla</button>
-    <div class="aim"></div>
-  </div>
+  <div class="game-container">
 
+
+    <!--başlangıç-->
+    <div class="start-screen" id="startScreen">
+
+      <div class="game-title">
+        <h1>🎯 AIM GAME</h1>
+        <p>Nişan Alma Oyunu</p>
+      </div>
+      
+      <div class="difficulty-selection">
+
+        <h3>Hazır Seviyeler</h3>
+        <div class="difficulty-buttons">
+
+          <button class="difficulty-btn" data-level="easy">
+            <span class="level-name">KOLAY</span>
+            <span class="level-desc">60s • 1 Puan • Sabit</span>
+          </button>
+
+
+          <button class="difficulty-btn" data-level="medium">
+            <span class="level-name">ORTA</span>
+            <span class="level-desc">50s • 2 Puan • Sabit</span>
+          </button>
+
+
+          <button class="difficulty-btn" data-level="hard">
+            <span class="level-name">ZOR</span>
+            <span class="level-desc">40s • 3 Puan • Hareketli</span>
+          </button>
+        </div>
+        
+
+        <div class="custom-section">
+          <button class="custom-btn" id="customBtn">
+            <span class="custom-icon">⚙️</span>
+            <span class="custom-text">ÖZELLEŞTİR</span>
+          </button>
+        </div>
+      </div>
+      
+
+      <button class="start-btn" id="startGameBtn" disabled>OYUNA BAŞLA</button>
+    </div>
+
+
+
+
+
+
+
+    <!--özel level -->
+    <div class="custom-screen" id="customScreen" style="display: none;">
+      <div class="custom-content">
+        <div class="custom-header">
+          <h2>⚙️ OYUN AYARLARI</h2>
+          <button class="back-btn" id="backBtn">← GERİ</button>
+        </div>
+        
+        <div class="custom-settings">
+          <div class="setting-group">
+            <label class="setting-label">
+              <span class="setting-name">Süre</span>
+              <span class="setting-value" id="timeValue">60 saniye</span>
+            </label>
+
+            <input type="range" class="setting-slider" id="timeSlider" min="30" max="120" value="60">
+            <div class="slider-labels">
+              <span>30s</span>
+              <span>120s</span>
+            </div>
+          </div>
+
+          <div class="setting-group">
+            <label class="setting-label">
+              <span class="setting-name">Hareket</span>
+              <span class="setting-value" id="movementValue">Sabit</span>
+            </label>
+            <div class="toggle-switch">
+              <input type="checkbox" id="movementToggle" class="toggle-input">
+              <label for="movementToggle" class="toggle-label">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+
+          <div class="setting-group">
+            <label class="setting-label">
+              <span class="setting-name">Hedef Boyutu</span>
+              <span class="setting-value" id="sizeValue">30px</span>
+            </label>
+            <input type="range" class="setting-slider" id="sizeSlider" min="20" max="50" value="30">
+            <div class="slider-labels">
+              <span>20px</span>
+              <span>50px</span>
+            </div>
+          </div>
+
+        </div>
+
+
+        <div class="custom-actions">
+          <button class="start-btn" id="customStartBtn">ÖZELLEŞTİRİLMİŞ OYUNU BAŞLAT</button>
+        </div>
+      </div>
+    </div>
+
+
+
+
+
+
+
+    <!--oyun-->
+    <div class="game-screen" id="gameScreen" style="display: none;">
+
+      <div class="game-header">
+        <div class="game-info">
+          <div class="time-display">
+            <span class="time-icon">⏱️</span>
+            <span class="time-text" id="timeDisplay">60</span>
+          </div>
+
+
+          <div class="score-display">
+            <span class="score-icon">🎯</span>
+            <span class="score-text" id="scoreDisplay">0</span>
+          </div>
+        </div>
+
+
+        <div class="game-controls">
+          <button class="control-btn pause-btn" id="pauseBtn">
+            <span class="btn-text">DURAKLAT</span>
+          </button>
+
+          <button class="control-btn exit-btn" id="exitBtn">
+            <span class="btn-text">ÇIKIŞ</span>
+          </button>
+        </div>
+        <div class="high-score">
+          <span class="high-score-text">En Yüksek: <span id="highScoreDisplay">0</span></span>
+        </div>
+      </div>
+
+
+      <div class="game-area" id="gameArea">
+        <div class="aim" id="aim"></div>
+      </div>
+    </div>
+
+
+
+
+
+
+
+    <!--duraklama -->
+    <div class="pause-screen" id="pauseScreen" style="display: none;">
+      <div class="pause-content">
+        <h2>⏸️ OYUN DURAKLADI</h2>
+        <div class="pause-info">
+          <div class="pause-stats">
+
+            <span class="pause-stat">
+              <span class="stat-icon">⏱️</span>
+              <span class="stat-label">Kalan Süre:</span>
+              <span class="stat-value" id="pauseTimeDisplay">60</span>
+            </span>
+
+            <span class="pause-stat">
+              <span class="stat-icon">🎯</span>
+              <span class="stat-label">Skor:</span>
+              <span class="stat-value" id="pauseScoreDisplay">0</span>
+            </span>
+          </div>
+        </div>
+
+
+        <div class="pause-actions">
+          <button class="pause-action-btn resume-btn" id="resumeBtn">
+            <span class="btn-icon">▶️</span>
+            <span class="btn-text">DEVAM ET</span>
+          </button>
+
+          <button class="pause-action-btn restart-btn" id="restartBtn">
+            <span class="btn-icon">🔄</span>
+            <span class="btn-text">YENİDEN BAŞLA</span>
+          </button>
+
+          <button class="pause-action-btn main-menu-btn" id="mainMenuBtn">
+            <span class="btn-icon">🏠</span>
+            <span class="btn-text">ANA MENÜ</span>
+          </button>
+
+        </div>
+      </div>
+    </div>
+
+
+
+
+
+
+
+
+    <!--bitiş-->
+    <div class="end-screen" id="endScreen" style="display: none;">
+      <div class="end-content">
+        <h2>🎉 OYUN BİTTİ!</h2>
+
+        <div class="final-score">
+          <span class="final-score-label">Skorunuz:</span>
+          <span class="final-score-value" id="finalScore">0</span>
+        </div>
+
+        <div class="high-score-achievement" id="highScoreAchievement" style="display: none;">
+          <span class="achievement-text">🏆 YENİ REKOR!</span>
+        </div>
+        
+        <button class="play-again-btn" id="playAgainBtn">TEKRAR OYNA</button>
+      </div>
+    </div>
+  </div>
 
   <script src="ap.js"></script>
 </body>
