@@ -146,5 +146,3 @@ Tarayıcıda oyun açılacak
 
 
 - Hedefleri tıklayarak skor kazanın ve en yüksek skoru kırın!
-
-
